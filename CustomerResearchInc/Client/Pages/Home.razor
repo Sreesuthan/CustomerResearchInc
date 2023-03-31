@@ -1,0 +1,86 @@
+﻿@page "/"
+
+<MudGrid Class="mb-3">
+	<MudCarousel Class="mud-width-full" Style="height:435px;" ShowArrows="true" ShowBullets="true" EnableSwipeGesture="true" AutoCycle="true" TData="object">
+		<MudCarouselItem Transition="Transition.Fade">
+			<a href="csi-client-satisfaction-index"><MudImage Src="Images/CSI.jpg" Fluid="true" Alt="Client Satisfaction" /></a>
+	    </MudCarouselItem>
+	    <MudCarouselItem Transition="Transition.Fade">
+			<a href="reputation"><MudImage Src="Images/Reputation.jpg" Fluid="true" Alt="Reputation" /></a>
+	    </MudCarouselItem>
+	    <MudCarouselItem Transition="Transition.Fade">
+			<a href="marketing"><MudImage Src="Images/Marketing.jpg" Fluid="true" Alt="Marketing" /></a>
+	    </MudCarouselItem>
+	    <MudCarouselItem Transition="Transition.Fade">
+			<a href="contact-center"><MudImage Src="Images/CallCenter.jpg" Fluid="true" Alt="Call Center" /></a>
+	    </MudCarouselItem>
+	</MudCarousel>
+</MudGrid>
+<MudGrid Style=@($"background-color: {Colors.Grey.Lighten2};") Justify="Justify.Center">
+	<MudItem xs="10" Class="mt-10 mb-10 text-center">
+		<MudText Style="color:#333333; font-family: 'Abel';font-weight: 400;font-size: 2.125em; text-transform: uppercase;">CRI: Always ahead of the CURVE.</MudText>
+		<MudText Style="color:#333333; font-family: 'Noto Serif';font-weight: 400;font-size: 14px;">Customer Research, Inc. (CRI) has provided leading customer satisfaction measurement, customer loyalty, market research, and contact center solutions since 1967. Today, CRI utilizes multiple channels of communication to help businesses across the globe:</MudText>
+		<MudText Class="mt-2" Style="color:#333333;">
+			<a class="mr-2" style="color:#d7732c; font-size: 17px; font-family: 'Abel', sans-serif;" Href="csi-client-satisfaction-index">INCREASE CSI AND CUSTOMER LOYALTY</a>-
+			<a class="mr-2" style="color:#89ae46; font-size: 17px; font-family: 'Abel', sans-serif;" Href="reputation">ENHANCE REPUTATION</a>-
+			<a class="mr-2" style="color:#645372; font-size: 17px; font-family: 'Abel', sans-serif;" Href="contact-center">CONTACT CENTER</a>-
+			<a class="mr-2" style="color:#064982; font-size: 17px; font-family: 'Abel', sans-serif;" Href="marketing">DRIVE BUSINESS</a>
+		</MudText>
+	</MudItem>
+</MudGrid>
+<MudGrid Class="mt-8 mb-8" Justify="Justify.Center">
+	<MudItem xs="5">
+		<MudGrid>
+			<MudItem xs="12">
+				<a href="#"><MudImage Src="Images/MysteryShop.jpg" Fluid="true" Class="rounded-top" Alt="MYSTERY SHOPPING" /></a>
+				<a href="#"><MudText Align="Align.Center" Style="color:#ffffff;background-color:#122845; font-family: 'Abel';font-weight: 400;font-size: 17px; text-transform: uppercase;" Class="p-3 rounded-bottom">CRI: Always ahead of the CURVE.</MudText></a>
+			</MudItem>
+		</MudGrid>
+	</MudItem>
+	<MudItem xs="5">
+		<MudGrid>
+			<MudItem xs="12">
+				<a href="#"><MudImage Src="Images/TTM-1.png" Fluid="true" Class="rounded-top" Alt="TEXT-THE-MANAGER" /></a>
+				<a href="#"><MudText Align="Align.Center" Style="color:#ffffff; font-family: 'Abel';font-weight: 400;font-size: 17px; background-color:#122845; text-transform: uppercase;" Class="p-3 rounded-bottom">CRI: Always ahead of the CURVE.</MudText></a>
+			</MudItem>
+		</MudGrid>
+	</MudItem>
+</MudGrid>
+<MudGrid Style="background-color:#002b45" Justify="Justify.Center">
+	<MudItem xs="10" Class="mt-8 mb-8">
+		<MudText Typo="Typo.body2" Style="color: #ffffff; font-size: 14px; font-family: 'Noto Serif', serif; font-weight: 400;">With deep roots in the automotive industry, CRI now works closely with businesses of all sizes, in all industries. What began as purely a CSI measurement service has evolved into a robust solution that pushes out customer feedback in the form of reviews that enhance online reputation. CRI has moved seamlessly from the forefront of customer satisfaction indexing to the forefront of the online reputation space. CRI offers an array of marketing services designed to drive revenue - from mining customer data to pure conquest. Coupling contact center services with effective multi-channel communication, CRI achieves results that exceed expectations.</MudText>
+	</MudItem>
+</MudGrid>
+<MudGrid Style="background-color:#EDEDED" Justify="Justify.Center" Class="mt-3">
+	<MudItem xs="10" Style="padding-top: 70px; padding-bottom: 70px">
+		<MudText Typo="Typo.body2" Style="color: #333333; font-size: 15px; font-style: italic; font-family: 'Noto Serif', serif; font-weight: 400;">“CRI has played an important role in the Toyota Certified Collision Center program for over a decade. Customer follow-up and analysis along with their ongoing support has helped our Toyota Collision Centers improve the level of service that our dealers provide to their customers. They are a great partner for us and I hope our relationship with CRI continues for many years to come.”</MudText>
+		<MudText Align="Align.End" Class="mt-8" Typo="Typo.body2" Style="color: #333333; font-size: 15px; font-style: italic; font-family: 'Noto Serif', serif; font-weight: 700;">— Dave Pyle, Wholesale Parts & Collision Development, Toyota Motor Sales, USA, Inc.</MudText>
+	</MudItem>
+</MudGrid>
+<MudGrid Justify="Justify.Center" Class="mt-8">
+	<MudItem xs="10">
+		<MudGrid>
+			<MudItem xs="12">
+				<MudText Align="Align.Center" Style="color:#333333; font-family: 'Abel';font-weight: 400;font-size: 2.125em; text-transform: uppercase;">CORPORATE PARTNERS</MudText>
+			</MudItem>
+			<MudItem xs="2" Class="text-center">
+				<a href="#"><MudText Align="Align.Center" Style="padding-top: 30px; padding-bottom: 30px; color:#064982; font-family: 'Abel';font-weight: 400;font-size: 17px; text-transform: uppercase;" Class="border-bottom border-end">BMW of North America</MudText></a>
+			</MudItem>
+			<MudItem xs="2" Class="text-center">
+				<a href="#"><MudText Align="Align.Center" Style="padding-top: 42px; padding-bottom: 42px; color:#645372; font-family: 'Abel';font-weight: 400;font-size: 17px; text-transform: uppercase;" Class="border-bottom border-end">Mitchell 1</MudText></a>
+			</MudItem>
+			<MudItem xs="2" Class="text-center">
+				<a href="#"><MudText Align="Align.Center" Style="padding-top: 42px; padding-bottom: 42px; color:#89ae46; font-family: 'Abel';font-weight: 400;font-size: 17px; text-transform: uppercase;" Class="border-bottom border-end">Amerisure insurance</MudText></a>
+			</MudItem>
+			<MudItem xs="2" Class="text-center">
+					<a href="#"><MudText Align="Align.Center" Style="padding-top: 42px; padding-bottom: 42px; color:#89ae46; font-family: 'Abel';font-weight: 400;font-size: 17px; text-transform: uppercase;" Class="border-bottom border-end">Sonic Automotive</MudText></a>
+			</MudItem>
+			<MudItem xs="2" Class="text-center">
+					<a href="#"><MudText Align="Align.Center" Style="padding-top: 30px; padding-bottom: 30px; color:#645372; font-family: 'Abel';font-weight: 400;font-size: 17px; text-transform: uppercase;" Class="border-bottom border-end">Solera - LYNX Services</MudText></a>
+			</MudItem>
+			<MudItem xs="2" Class="text-center">
+				<a href="#"><MudText Align="Align.Center" Style="padding-top: 42px; padding-bottom: 42px; color:#064982; font-family: 'Abel';font-weight: 400;font-size: 17px; text-transform: uppercase;" Class="border-bottom border-end">SureCritic</MudText></a>
+			</MudItem>
+		</MudGrid>
+	</MudItem>
+</MudGrid>

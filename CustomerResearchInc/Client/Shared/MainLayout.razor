@@ -1,0 +1,76 @@
+﻿@inherits LayoutComponentBase
+
+<MudThemeProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<MudLayout>
+    <MudAppBar Class="ml-auto mr-auto" Style=@($"background-color: {Colors.Grey.Lighten2}; max-width:1366px;")>
+        <MudGrid Justify="Justify.Center" Style="background-color: transparent;">
+            <MudItem xs="11">
+                <MudButton Variant="Variant.Text" Href="csi-client-satisfaction-index" Style="text-transform:none;color: #002B43; font-family: 'Abel', sans-serif; font-size: 1.3em;" Class="ml-1">CSI</MudButton>
+                <MudButton Variant="Variant.Text" Href="reputation" Style="text-transform:none;color: #002B43; font-family: 'Abel', sans-serif; font-size: 1.3em;" Class="ml-1">Reputation</MudButton>
+                <MudButton Variant="Variant.Text" Href="marketing" Style="text-transform:none;color: #002B43; font-family: 'Abel', sans-serif; font-size: 1.3em;" Class="ml-1">Marketing</MudButton>
+                <MudButton Variant="Variant.Text" Href="contact-center" Style="text-transform:none;color: #002B43; font-family: 'Abel', sans-serif; font-size: 1.3em;" Class="ml-1">Contact Center</MudButton>
+                <MudButton Variant="Variant.Text" Href="about-us" Style="text-transform:none;color: #002B43; font-family: 'Abel', sans-serif; font-size: 1.3em;" Class="ml-1">About Us</MudButton>
+                <MudIconButton Href="https://www.linkedin.com/company/customer-research-inc./" Style="color: #002B43; float:right;" Class="ml-1" Icon="@Icons.Custom.Brands.LinkedIn" />
+                <MudIconButton Href="https://twitter.com/CRIMarketing" Style="color: #002B43; float:right;" Class="ml-1" Icon="@Icons.Custom.Brands.Twitter" />
+                <MudIconButton Href="https://www.facebook.com/CustomerResearch/" Style="color: #002B43; float:right;" Class="ml-1" Icon="@Icons.Custom.Brands.Facebook" />
+            </MudItem>
+        </MudGrid>
+        
+    </MudAppBar>
+    <MudMainContent>
+        <MudContainer Style="max-width:1366px" Class="pt-3">
+            <MudGrid Justify="Justify.Center" Style="background-color: transparent;">
+                <MudItem xs="7">
+                    <a href="/"><MudImage Src="Images/CRI-logo 1.png" Fluid="true" /></a>
+                </MudItem>
+                <MudItem xs="4">
+                    <MudGrid>
+                        <MudItem xs="12">
+                            <MudButton Variant="Variant.Filled" Href="contact-us" Color="Color.Primary" Size="Size.Large" EndIcon="@Icons.Material.Filled.ForwardToInbox" Style="text-transform:none; font-family: 'Abel', sans-serif; float:right; font-size: 16px; background-color:#645372">Contact Us</MudButton>
+                            <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" EndIcon="@Icons.Material.Outlined.Lock" Style="text-transform:none; font-family: 'Abel', sans-serif; float:right; font-size: 16px; background-color:#D7732C" Class="mr-3">Client Login</MudButton>
+                        </MudItem>
+                        <MudItem xs="12">
+                            <MudText Typo="Typo.body2" Align="Align.End" Class="mr-3" Style="color:#898989;font-family: 'Abel', sans-serif; font-size: 1.1em;">800.886.3472  | Info@CustomerResearch.com</MudText>
+                        </MudItem>
+                    </MudGrid>
+                </MudItem>
+            </MudGrid>
+            @Body
+            <MudGrid Style="background-color:#414141;" Class="mt-10" Justify="Justify.Center">
+                <MudItem xs="10">
+                    <MudGrid Class="mt-4">
+                        <MudItem xs="12" Class="text-center">
+                            <MudText Typo="Typo.body2" Style="color:#cecece; font-size: 17px; font-family: 'Abel', sans-serif;">
+                                <a class="mr-6" style="color:#cecece; font-size: 17px; font-family: 'Abel', sans-serif; letter-spacing: .05em;" Href="/">HOME</a>|
+                                <a class="mr-6 ml-6" style="color:#cecece; font-size: 17px; font-family: 'Abel', sans-serif; letter-spacing: .05em;" href="csi-client-satisfaction-index">CSI</a>|
+                                <a class="mr-6 ml-6" style="color:#cecece; font-size: 17px; font-family: 'Abel', sans-serif; letter-spacing: .05em;" href="reputation">REPUTATION</a>|
+                                <a class="mr-6 ml-6" style="color:#cecece; font-size: 17px; font-family: 'Abel', sans-serif; letter-spacing: .05em;" href="marketing">MARKETING</a>|
+                                <a class="mr-6 ml-6" style="color:#cecece; font-size: 17px; font-family: 'Abel', sans-serif; letter-spacing: .05em;" href="contact-center">CONTACT CENTER</a>|
+                                <a class="mr-6 ml-6" style="color:#cecece; font-size: 17px; font-family: 'Abel', sans-serif; letter-spacing: .05em;" href="about-us">ABOUT US</a>|
+                                <a class="ml-6" style="color:#cecece; font-size: 17px; font-family: 'Abel', sans-serif; letter-spacing: .05em;" href="contact-us">CONTACT US</a>
+                            </MudText>
+                        </MudItem>
+                        <MudItem xs="12" Class="text-center mt-4 mb-8">
+                            <MudText Typo="Typo.body2" Style=" color: #AFAFAF; font-size: 17px; font-family: 'Abel', sans-serif; font-weight: 400;">Let’s Connect:</MudText>
+                            <MudIconButton Href="https://www.facebook.com/CustomerResearch/" Style="color: #AFAFAF;" Class="ml-1" Icon="@Icons.Custom.Brands.Facebook" />
+                            <MudIconButton Href="https://twitter.com/CRIMarketing" Style="color: #AFAFAF;" Class="ml-1" Icon="@Icons.Custom.Brands.Twitter" />
+                            <MudIconButton Href="https://www.linkedin.com/company/customer-research-inc./" Style="color: #AFAFAF;" Class="ml-1" Icon="@Icons.Custom.Brands.LinkedIn" />
+                        </MudItem>
+                    </MudGrid>
+                </MudItem>
+            </MudGrid>
+            <MudGrid Style="background-color:#07243A;" Justify="Justify.Center">
+                <MudItem xs="10">
+                    <MudGrid>
+                        <MudItem xs="12" Class="text-center">
+                            <MudText Typo="Typo.body2" Style=" color: #ffffff; font-size: 14px; font-family: 'Noto Serif', serif; font-weight: 400;">© 2023 . All rights reserved.<a class="ml-2" style="color: #ffffff;" href="privacy">Privacy</a></MudText>
+                        </MudItem>
+                    </MudGrid>
+                </MudItem>
+            </MudGrid>
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
