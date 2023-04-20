@@ -1,0 +1,83 @@
+﻿@layout LoginLayout
+@page "/registration"
+@inject HttpClient Http
+@inject NavigationManager navigationManager
+@inject MudBlazor.ISnackbar snackBar
+
+<MudGrid Style="background: linear-gradient(#fff 20%, #cde7f4 100%);" Justify="Justify.Center">
+    <MudItem xs=10 sm="6" lg="4" Style="background-color: #fff;" Class="border rounded mt-11 mb-11">
+        <EditForm Model="register" OnValidSubmit="HandleSubmit">
+            <DataAnnotationsValidator />
+            <MudGrid Class="p-2">
+                <MudItem xs="12">
+                    <MudImage Src="Images/CRI-logo 1.png" Fluid="true" />
+                </MudItem>
+                @{
+                    if (Error.Length > 0)
+                    {
+                        <MudItem xs="12">
+                            <MudAlert Severity="Severity.Error" Dense="true">@Error</MudAlert>
+                        </MudItem>
+                    }
+                }
+                <MudItem xs="12">
+                    <MudTextField Label="Email" @bind-Value="register.Email" Class="mt-4" Variant="MudBlazor.Variant.Outlined" For="@(()=>register.Email)" Required="true"></MudTextField>
+                    <MudTextField @bind-Value="register.Password" Label="Password" Class="mt-4" Variant="MudBlazor.Variant.Outlined" For="@(()=>register.Password)" Required="true" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ShowPassword" AdornmentAriaLabel="Show Password" />
+                    <MudTextField Label="Re-type Password" @bind-Value="register.ConfirmPassword" Class="mt-4" Variant="MudBlazor.Variant.Outlined" For="@(()=>register.ConfirmPassword)" Required="true"></MudTextField>
+                    <MudSelect Label="Select Login Type" T="string" Required="true" Class="mt-4" Variant="MudBlazor.Variant.Outlined" @bind-Value="register.Role">
+                        <MudSelectItem Value="@("Body321")" />
+                        <MudSelectItem Value="@("AppliedConcepts")" />
+                        <MudSelectItem Value="@("ProStarsCSI-Facility")" />
+                    </MudSelect>
+                    <MudButton ButtonType="MudBlazor.ButtonType.Submit" Variant="MudBlazor.Variant.Filled" Class="mt-6 mb-2" Style="background-color:#035583; color: #E3E3E6; width:100%;">Sign up</MudButton>
+                    <hr/>
+                    <MudText Class="mt-2" Style="font-size: 16px; text-align:center;">Already registered? <MudLink Href="login" Color="Color.Info" Underline="Underline.Hover">Login here!</MudLink></MudText>
+                </MudItem>
+            </MudGrid>             
+        </EditForm>
+	</MudItem>
+</MudGrid>
+
+
+@code{
+    Register register = new Register();
+    public string Error { get; set; } = string.Empty;
+    bool isShow;
+    InputType PasswordInput = InputType.Password;
+    string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+
+    void ShowPassword()
+    {
+        @if (isShow)
+        {
+            isShow = false;
+            PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+            PasswordInput = InputType.Password;
+        }
+        else
+        {
+            isShow = true;
+            PasswordInputIcon = Icons.Material.Filled.Visibility;
+            PasswordInput = InputType.Text;
+        }
+    }
+    
+    public async Task HandleSubmit()
+    {
+        var result = await Http.PostAsJsonAsync("/api/User/register", register);
+        if (result.StatusCode == System.Net.HttpStatusCode.BadRequest)
+        {
+            var error = await result.Content.ReadAsStringAsync();
+            if (error != null)
+            {
+                Error = error;
+            }
+            navigationManager.NavigateTo("/registration");
+        }
+        if (result.IsSuccessStatusCode)
+        {
+            snackBar.Add("Registration completed successfully...!", Severity.Success);
+            navigationManager.NavigateTo("/login");
+        }
+    }
+}

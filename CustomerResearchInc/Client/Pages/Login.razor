@@ -1,0 +1,86 @@
+﻿@layout LoginLayout
+@page "/login"
+@inject HttpClient Http
+@inject NavigationManager navigationManager
+@inject MudBlazor.ISnackbar snackBar
+@inject AuthenticationStateProvider AuthStateProvider
+@inject ILocalStorageService LocalStorage
+
+<MudGrid Style="background: linear-gradient(#fff 20%, #cde7f4 100%);" Justify="Justify.Center">
+    <MudItem xs=10 sm="6" lg="4" Style="background-color: #fff;" Class="border rounded mt-11 mb-11">
+		<EditForm Model="signIn" OnValidSubmit="HandleSubmit">
+            <DataAnnotationsValidator />
+            <MudGrid Class="p-2">
+                <MudItem xs="12">
+                    <MudImage Src="Images/CRI-logo 1.png" Fluid="true" />
+                </MudItem>
+                @{
+                    if (Error.Length > 0)
+                    {
+                        <MudItem xs="12">
+                            <MudAlert Severity="Severity.Error" Dense="true">@Error</MudAlert>
+                        </MudItem>
+                    }
+                }
+                <MudItem xs="12">
+                    <MudTextField Label="Username" @bind-Value="signIn.Email" Variant="MudBlazor.Variant.Outlined" For="@(()=>signIn.Email)" Required="true"></MudTextField>
+                    <MudTextField @bind-Value="signIn.Password" Label="Password" Class="mt-4 mb-2" Variant="MudBlazor.Variant.Outlined" For="@(()=>signIn.Password)" Required="true" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ShowPassword" AdornmentAriaLabel="Show Password" />
+                    <MudLink Href="#" Style="font-size: 16px; float:right;" Color="Color.Info" Underline="Underline.Hover">Forgot Password?</MudLink>
+                    <MudCheckBox @bind-Checked="signIn.RememberMe" Label="Remember Me" Style="float:left;" Class="mt-2"></MudCheckBox>
+                    <MudButton ButtonType="MudBlazor.ButtonType.Submit" Variant="MudBlazor.Variant.Filled" Class="mt-2 mb-2" Style="background-color:#035583; color: #E3E3E6; width:100%;">Login</MudButton>
+                    <hr/>
+                    <MudText Class="mt-2" Style="font-size: 16px; text-align:center;">Not yet registered? <MudLink Href="registration" Color="Color.Info" Underline="Underline.Hover">Register here!</MudLink></MudText>
+                </MudItem>
+            </MudGrid>             
+        </EditForm>
+	</MudItem>
+</MudGrid>
+
+
+@code{
+    SignIn signIn = new SignIn();
+    public string Error { get; set; } = string.Empty;
+    bool isShow;
+    InputType PasswordInput = InputType.Password;
+    string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+
+    void ShowPassword()
+    {
+        @if (isShow)
+        {
+            isShow = false;
+            PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+            PasswordInput = InputType.Password;
+        }
+        else
+        {
+            isShow = true;
+            PasswordInputIcon = Icons.Material.Filled.Visibility;
+            PasswordInput = InputType.Text;
+        }
+    }
+
+    public async Task HandleSubmit()
+    {
+        var response = await Http.PostAsJsonAsync("/api/User/login", signIn);
+        if (response.IsSuccessStatusCode)
+        {
+            var token = await response.Content.ReadAsStringAsync();
+            await LocalStorage.SetItemAsync("token", token);
+            await AuthStateProvider.GetAuthenticationStateAsync();
+
+            snackBar.Add("Signed In Successfully...!", Severity.Success);
+            navigationManager.NavigateTo("/");
+        }
+
+        if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+        {
+            var error = await response.Content.ReadAsStringAsync();
+            if (error != null)
+            {
+                Error = error;
+            }
+            navigationManager.NavigateTo("/login");
+        }
+    }
+}

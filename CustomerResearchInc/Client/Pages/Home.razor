@@ -1,86 +1,361 @@
 ﻿@page "/"
+@page "/{isloggedout:bool}"
+@inject MudBlazor.ISnackbar snackBar
 
-<MudGrid Class="mb-3">
-	<MudCarousel Class="mud-width-full" Style="height:435px;" ShowArrows="true" ShowBullets="true" EnableSwipeGesture="true" AutoCycle="true" TData="object">
-		<MudCarouselItem Transition="Transition.Fade">
-			<a href="csi-client-satisfaction-index"><MudImage Src="Images/CSI.jpg" Fluid="true" Alt="Client Satisfaction" /></a>
-	    </MudCarouselItem>
-	    <MudCarouselItem Transition="Transition.Fade">
-			<a href="reputation"><MudImage Src="Images/Reputation.jpg" Fluid="true" Alt="Reputation" /></a>
-	    </MudCarouselItem>
-	    <MudCarouselItem Transition="Transition.Fade">
-			<a href="marketing"><MudImage Src="Images/Marketing.jpg" Fluid="true" Alt="Marketing" /></a>
-	    </MudCarouselItem>
-	    <MudCarouselItem Transition="Transition.Fade">
-			<a href="contact-center"><MudImage Src="Images/CallCenter.jpg" Fluid="true" Alt="Call Center" /></a>
-	    </MudCarouselItem>
-	</MudCarousel>
-</MudGrid>
-<MudGrid Style=@($"background-color: {Colors.Grey.Lighten2};") Justify="Justify.Center">
-	<MudItem xs="10" Class="mt-10 mb-10 text-center">
-		<MudText Style="color:#333333; font-family: 'Abel';font-weight: 400;font-size: 2.125em; text-transform: uppercase;">CRI: Always ahead of the CURVE.</MudText>
-		<MudText Style="color:#333333; font-family: 'Noto Serif';font-weight: 400;font-size: 14px;">Customer Research, Inc. (CRI) has provided leading customer satisfaction measurement, customer loyalty, market research, and contact center solutions since 1967. Today, CRI utilizes multiple channels of communication to help businesses across the globe:</MudText>
-		<MudText Class="mt-2" Style="color:#333333;">
-			<a class="mr-2" style="color:#d7732c; font-size: 17px; font-family: 'Abel', sans-serif;" Href="csi-client-satisfaction-index">INCREASE CSI AND CUSTOMER LOYALTY</a>-
-			<a class="mr-2" style="color:#89ae46; font-size: 17px; font-family: 'Abel', sans-serif;" Href="reputation">ENHANCE REPUTATION</a>-
-			<a class="mr-2" style="color:#645372; font-size: 17px; font-family: 'Abel', sans-serif;" Href="contact-center">CONTACT CENTER</a>-
-			<a class="mr-2" style="color:#064982; font-size: 17px; font-family: 'Abel', sans-serif;" Href="marketing">DRIVE BUSINESS</a>
-		</MudText>
-	</MudItem>
-</MudGrid>
-<MudGrid Class="mt-8 mb-8" Justify="Justify.Center">
-	<MudItem xs="5">
-		<MudGrid>
-			<MudItem xs="12">
-				<a href="#"><MudImage Src="Images/MysteryShop.jpg" Fluid="true" Class="rounded-top" Alt="MYSTERY SHOPPING" /></a>
-				<a href="#"><MudText Align="Align.Center" Style="color:#ffffff;background-color:#122845; font-family: 'Abel';font-weight: 400;font-size: 17px; text-transform: uppercase;" Class="p-3 rounded-bottom">CRI: Always ahead of the CURVE.</MudText></a>
+
+<AuthorizeView>
+	<NotAuthorized>
+		<MudGrid Class="mb-3">
+			<MudCarousel Class="mud-width-full" Style="height:500px; color:#fff" ShowArrows="true" ShowBullets="true" EnableSwipeGesture="true" AutoCycle="true" TData="object">
+				<MudCarouselItem Transition="Transition.Fade">
+					<a href="marketing"><MudImage Src="Images/Marketing.jpeg" Style="width:100%; height:100%" Alt="Marketing" /></a>
+				</MudCarouselItem>
+				<MudCarouselItem Transition="Transition.Fade">
+					<a href="reputation"><MudImage Src="Images/Reputation.jpeg" Style="width:100%; height:100%" Alt="Reputation" /></a>
+			    </MudCarouselItem>
+			    <MudCarouselItem Transition="Transition.Fade">
+					<a href="contact-center"><MudImage Src="Images/CallCenter.jpeg" Style="width:100%; height:100%" Alt="Call Center" /></a>
+			    </MudCarouselItem>
+				<MudCarouselItem Transition="Transition.Fade">
+					<a href="csi-client-satisfaction-index"><MudImage Src="Images/CSI.jpeg" Style="width:100%; height:100%" Alt="Client Satisfaction" /></a>
+				</MudCarouselItem>
+			</MudCarousel>
+		</MudGrid>
+		<MudGrid Style="background: linear-gradient(#fff 15%, #cde7f4 100%);" Justify="Justify.Center">
+			<MudItem xs="10" Class="mt-10 mb-10 text-center">
+				<MudGrid>
+					<MudItem xs="12" sm="12" md="12">
+						<MudText Style="color:#0787C9; font-weight: 500;font-size: 2.12em; text-transform: uppercase;">CRI: Always ahead of the CURVE</MudText>
+						<MudText Style="color:#676773;font-size: 15px;" Class="mt-2">Customer Research, Inc. (CRI) has provided leading customer satisfaction measurement, customer loyalty, market research, and contact center solutions since 1967. Today, CRI utilizes multiple channels of communication to help businesses across the globe:</MudText>
+					</MudItem>
+					<MudItem xs="12" sm="6" md="3">
+						<MudCard>
+							<MudCardHeader>
+								<CardHeaderContent>
+									<MudText Style="color:#0787C9; font-size: 18px; font-weight: 500;">CUSTOMER LOYALTY</MudText>
+								</CardHeaderContent>
+							</MudCardHeader>
+							<MudCardContent>
+								<MudText Style="color:#676773; font-size: 14px;">CRI CSI programs will provide your business with the detailed information to retain customers.</MudText>
+							</MudCardContent>
+							<MudCardActions>
+								<MudButton Href="csi-client-satisfaction-index" Variant="MudBlazor.Variant.Text" EndIcon="@Icons.Material.Filled.ArrowForward" Style="text-transform:none;color: #0787C9; font-size: 1.2em;" Class="ml-auto mr-auto">Learn More</MudButton>
+							</MudCardActions>
+						</MudCard>
+					</MudItem>
+					<MudItem xs="12" sm="6" md="3">
+						<MudCard>
+							<MudCardHeader>
+								<CardHeaderContent>
+									<MudText Style="color:#0787C9; font-size: 18px; font-weight: 500;">ENHANCE REPUTATION</MudText>
+								</CardHeaderContent>
+							</MudCardHeader>
+							<MudCardContent>
+								<MudText Style="color:#676773; font-size: 14px;">93% of customers say that their buying decisions are influenced by the online reviews.</MudText>
+							</MudCardContent>
+							<MudCardActions>
+								<MudButton Href="reputation" Variant="MudBlazor.Variant.Text" EndIcon="@Icons.Material.Filled.ArrowForward" Style="text-transform:none;color: #0787C9; font-size: 1.2em;" Class="ml-auto mr-auto">Learn More</MudButton>
+							</MudCardActions>
+						</MudCard>
+					</MudItem>
+					<MudItem xs="12" sm="6" md="3">
+						<MudCard>
+							<MudCardHeader>
+								<CardHeaderContent>
+									<MudText Style="color:#0787C9; font-size: 18px; font-weight: 500;">DRIVE BUSINESS</MudText>
+								</CardHeaderContent>
+							</MudCardHeader>
+							<MudCardContent>
+								<MudText Style="color:#676773; font-size: 14px;">CRI's industry leading outreach programs drive customers to your business and create new revenue.</MudText>
+							</MudCardContent>
+							<MudCardActions>
+								<MudButton Href="marketing" Variant="MudBlazor.Variant.Text" EndIcon="@Icons.Material.Filled.ArrowForward" Style="text-transform:none;color: #0787C9; font-size: 1.2em;" Class="ml-auto mr-auto">Learn More</MudButton>
+							</MudCardActions>
+						</MudCard>
+					</MudItem>
+					<MudItem xs="12" sm="6" md="3">
+						<MudCard>
+							<MudCardHeader>
+								<CardHeaderContent>
+									<MudText Style="color:#0787C9; font-size: 18px; font-weight: 500;">CONTACT CENTER</MudText>
+								</CardHeaderContent>
+							</MudCardHeader>
+							<MudCardContent>
+								<MudText Style="color:#676773; font-size: 14px;">CRI completes more than 500,000 calls per month from our contact center around the globe.</MudText>
+							</MudCardContent>
+							<MudCardActions>
+								<MudButton Href="contact-center" Variant="MudBlazor.Variant.Text" EndIcon="@Icons.Material.Filled.ArrowForward" Style="text-transform:none;color: #0787C9; font-size: 1.2em;" Class="ml-auto mr-auto">Learn More</MudButton>
+							</MudCardActions>
+						</MudCard>
+					</MudItem>
+				</MudGrid>
 			</MudItem>
 		</MudGrid>
-	</MudItem>
-	<MudItem xs="5">
-		<MudGrid>
-			<MudItem xs="12">
-				<a href="#"><MudImage Src="Images/TTM-1.png" Fluid="true" Class="rounded-top" Alt="TEXT-THE-MANAGER" /></a>
-				<a href="#"><MudText Align="Align.Center" Style="color:#ffffff; font-family: 'Abel';font-weight: 400;font-size: 17px; background-color:#122845; text-transform: uppercase;" Class="p-3 rounded-bottom">CRI: Always ahead of the CURVE.</MudText></a>
+		
+		<MudGrid Class="mt-8" Style="background: linear-gradient(#fff 20%, #cde7f4 100%);" Justify="Justify.Center">
+			<MudItem xs="10">
+				<MudGrid Justify="Justify.Center">
+					<MudItem Class="mt-4" xs="12" sm="9" lg="5">
+						<a href="mystery-shopping"><MudImage Src="Images/MysteryShopping.jpg" Fluid="true" Class="rounded-lg" Alt="MYSTERY SHOPPING" /></a>
+					</MudItem>
+					<MudItem Class="mt-4" xs="12" sm="9" lg="6">
+						<MudText Class="mt-2" Style="color:#0787C9; font-size: 19px; font-weight: 700;" href="#">MYSTERY SHOPPING</MudText>
+						<MudText Class="mt-4" Style="color: #0787C9; font-size: 17px; font-style: italic; font-weight: 500;">Improve the Customer Experience with your business:</MudText>
+						<ul class="mt-4 mb-4" style="color: #676773; font-size: 15px; list-style-type:initial; margin-left : 1em;">
+							<li class="mt-2">Get a complete and unbiased view of your business</li>
+							<li class="mt-2">Uncover internal strengths and areas for improvement</li>
+							<li class="mt-2">Measure quality of service and compliance with policy</li>
+							<li class="mt-2">Uncover potentially harmful first impressions that may be resulting in lost leads</li>
+						</ul>
+						<MudLink Href="mystery-shopping" Style="font-size: 16px; font-weight: 500;" Color="Color.Info" Underline="Underline.Hover"><span style="color:#0787C9;">Learn More <MudIcon Icon="@Icons.Material.Filled.ArrowForward" /></span></MudLink>
+					</MudItem>
+					<MudItem Class="mt-4 mb-4" xs="12" sm="9" lg="6">
+						<MudText Class="mt-2" Style="color:#0787C9; font-size: 19px; font-weight: 700;" href="#">TEXT-THE-MANAGER</MudText>
+						<MudText Class="mt-4" Style="color: #0787C9; font-size: 17px; font-style: italic; font-weight: 500;">Features:</MudText>
+						<ul class="mt-4 mb-4" style="color: #676773; font-size: 15px; list-style-type:initial; margin-left : 1em;">
+							<li class="mt-2">Elevate staff awareness and attentiveness to customer issues</li>
+							<li class="mt-2">Track your progress and prioritize complaints and compliments</li>
+							<li class="mt-2">Prioritize and track messages: Open, In-Process or Closed</li>
+							<li class="mt-2">Auto response for after-hours</li>
+							<li class="mt-2">Zero implementation time</li>
+						</ul>
+						<MudLink Href="text-the-manager" Style="font-size: 16px; font-weight: 500;" Color="Color.Info" Underline="Underline.Hover"><span style="color:#0787C9;">Learn More <MudIcon Icon="@Icons.Material.Filled.ArrowForward" /></span></MudLink>
+					</MudItem>
+					<MudItem Class="mt-4 mb-4" xs="12" sm="9" lg="5">
+						<a href="mystery-shopping"><MudImage Src="Images/TextManager.jpg" Fluid="true" Class="rounded-lg" Alt="MYSTERY SHOPPING" /></a>
+					</MudItem>
+				</MudGrid>
 			</MudItem>
 		</MudGrid>
-	</MudItem>
-</MudGrid>
-<MudGrid Style="background-color:#002b45" Justify="Justify.Center">
-	<MudItem xs="10" Class="mt-8 mb-8">
-		<MudText Typo="Typo.body2" Style="color: #ffffff; font-size: 14px; font-family: 'Noto Serif', serif; font-weight: 400;">With deep roots in the automotive industry, CRI now works closely with businesses of all sizes, in all industries. What began as purely a CSI measurement service has evolved into a robust solution that pushes out customer feedback in the form of reviews that enhance online reputation. CRI has moved seamlessly from the forefront of customer satisfaction indexing to the forefront of the online reputation space. CRI offers an array of marketing services designed to drive revenue - from mining customer data to pure conquest. Coupling contact center services with effective multi-channel communication, CRI achieves results that exceed expectations.</MudText>
-	</MudItem>
-</MudGrid>
-<MudGrid Style="background-color:#EDEDED" Justify="Justify.Center" Class="mt-3">
-	<MudItem xs="10" Style="padding-top: 70px; padding-bottom: 70px">
-		<MudText Typo="Typo.body2" Style="color: #333333; font-size: 15px; font-style: italic; font-family: 'Noto Serif', serif; font-weight: 400;">“CRI has played an important role in the Toyota Certified Collision Center program for over a decade. Customer follow-up and analysis along with their ongoing support has helped our Toyota Collision Centers improve the level of service that our dealers provide to their customers. They are a great partner for us and I hope our relationship with CRI continues for many years to come.”</MudText>
-		<MudText Align="Align.End" Class="mt-8" Typo="Typo.body2" Style="color: #333333; font-size: 15px; font-style: italic; font-family: 'Noto Serif', serif; font-weight: 700;">— Dave Pyle, Wholesale Parts & Collision Development, Toyota Motor Sales, USA, Inc.</MudText>
-	</MudItem>
-</MudGrid>
-<MudGrid Justify="Justify.Center" Class="mt-8">
-	<MudItem xs="10">
-		<MudGrid>
-			<MudItem xs="12">
-				<MudText Align="Align.Center" Style="color:#333333; font-family: 'Abel';font-weight: 400;font-size: 2.125em; text-transform: uppercase;">CORPORATE PARTNERS</MudText>
-			</MudItem>
-			<MudItem xs="2" Class="text-center">
-				<a href="#"><MudText Align="Align.Center" Style="padding-top: 30px; padding-bottom: 30px; color:#064982; font-family: 'Abel';font-weight: 400;font-size: 17px; text-transform: uppercase;" Class="border-bottom border-end">BMW of North America</MudText></a>
-			</MudItem>
-			<MudItem xs="2" Class="text-center">
-				<a href="#"><MudText Align="Align.Center" Style="padding-top: 42px; padding-bottom: 42px; color:#645372; font-family: 'Abel';font-weight: 400;font-size: 17px; text-transform: uppercase;" Class="border-bottom border-end">Mitchell 1</MudText></a>
-			</MudItem>
-			<MudItem xs="2" Class="text-center">
-				<a href="#"><MudText Align="Align.Center" Style="padding-top: 42px; padding-bottom: 42px; color:#89ae46; font-family: 'Abel';font-weight: 400;font-size: 17px; text-transform: uppercase;" Class="border-bottom border-end">Amerisure insurance</MudText></a>
-			</MudItem>
-			<MudItem xs="2" Class="text-center">
-					<a href="#"><MudText Align="Align.Center" Style="padding-top: 42px; padding-bottom: 42px; color:#89ae46; font-family: 'Abel';font-weight: 400;font-size: 17px; text-transform: uppercase;" Class="border-bottom border-end">Sonic Automotive</MudText></a>
-			</MudItem>
-			<MudItem xs="2" Class="text-center">
-					<a href="#"><MudText Align="Align.Center" Style="padding-top: 30px; padding-bottom: 30px; color:#645372; font-family: 'Abel';font-weight: 400;font-size: 17px; text-transform: uppercase;" Class="border-bottom border-end">Solera - LYNX Services</MudText></a>
-			</MudItem>
-			<MudItem xs="2" Class="text-center">
-				<a href="#"><MudText Align="Align.Center" Style="padding-top: 42px; padding-bottom: 42px; color:#064982; font-family: 'Abel';font-weight: 400;font-size: 17px; text-transform: uppercase;" Class="border-bottom border-end">SureCritic</MudText></a>
+		
+		<MudGrid Class="border" Justify="Justify.Center">
+			<MudItem xs="10" Class="mt-12 mb-11">
+				<MudGrid Justify="Justify.Center">
+					<MudItem xs="12" sm="9" lg="7" Style="padding-top: 40px; padding-bottom: 40px" Class="border rounded-start">
+						<MudText Style="color: #676773; font-size: 15px; font-weight: 500;">With deep roots in the automotive industry, CRI now works closely with businesses of all sizes, in all industries. What began as purely a CSI measurement service has evolved into a robust solution that pushes out customer feedback in the form of reviews that enhance online reputation. CRI has moved seamlessly from the forefront of customer satisfaction indexing to the forefront of the online reputation space. CRI offers an array of marketing services designed to drive revenue - from mining customer data to pure conquest. Coupling contact center services with effective multi-channel communication, CRI achieves results that exceed expectations.</MudText>
+					</MudItem>
+					<MudItem xs="12" sm="9" lg="5" Style="background-color: #f2f2f2; padding-top: 42px;" Class="rounded-end">
+						<MudText Style="color: #676773; font-size: 13px; font-style: italic;">“CRI has played an important role in the Toyota Certified Collision Center program for over a decade. Customer follow-up and analysis along with their ongoing support has helped our Toyota Collision Centers improve the level of service that our dealers provide to their customers. They are a great partner for us and I hope our relationship with CRI continues for many years to come.”</MudText>
+						<MudText Align="Align.End" Class="mt-4" Typo="Typo.body2" Style="color: #0787C9; font-size: 15px; font-style: italic; font-weight: 700;">— Dave Pyle, Wholesale Parts & Collision Development<br />Toyota Motor Sales, USA, Inc.</MudText>
+					</MudItem>
+				</MudGrid>
 			</MudItem>
 		</MudGrid>
-	</MudItem>
-</MudGrid>
+		
+		<MudGrid Justify="Justify.Center" Style="background: linear-gradient(#fff 20%, #cde7f4 100%);" Class="mt-3">
+			<MudItem xs="10" Class="mb-4">
+				<MudGrid>
+					<MudItem xs="12" Class="mt-2 pb-0">
+						<MudText Align="Align.Center" Style="color:#676773; font-size: 2.12em; text-transform: uppercase;">CORPORATE PARTNERS</MudText>
+					</MudItem>
+					<MudItem xs="12" sm="4" lg="2" Class="text-center">
+						<MudCard Style="min-height:64px;">
+							<MudCardActions>
+								<MudLink Href="text-the-manager" Style="font-size: 16px; font-weight: 500; text-transform: uppercase;" Class="ml-auto mr-auto mt-3 mb-3" Color="Color.Info" Underline="Underline.Hover"><span style="color:#0787C9;">MITCHELL 1</span></MudLink>
+							</MudCardActions>
+						</MudCard>
+					</MudItem>
+					<MudItem xs="12" sm="4" lg="2" Class="text-center">
+						<MudCard Style="min-height:64px;">
+							<MudCardActions>
+								<MudLink Href="text-the-manager" Style="font-size: 16px; font-weight: 500; text-transform: uppercase;" Class="ml-auto mr-auto" Color="Color.Info" Underline="Underline.Hover"><span style="color:#0787C9;">BMW of North America</span></MudLink>
+							</MudCardActions>
+						</MudCard>
+					</MudItem>																								   
+					<MudItem xs="12" sm="4" lg="2" Class="text-center">
+						<MudCard Style="min-height:64px;">
+							<MudCardActions>
+								<MudLink Href="text-the-manager" Style="font-size: 16px; font-weight: 500; text-transform: uppercase;" Class="ml-auto mr-auto" Color="Color.Info" Underline="Underline.Hover"><span style="color:#0787C9;">Amerisure insurance</span></MudLink>
+							</MudCardActions>
+						</MudCard>	
+					</MudItem>																									   
+					<MudItem xs="12" sm="4" lg="2" Class="text-center">
+						<MudCard Style="min-height:64px;">
+							<MudCardActions>
+								<MudLink Href="text-the-manager" Style="font-size: 16px; font-weight: 500; text-transform: uppercase;" Class="ml-auto mr-auto" Color="Color.Info" Underline="Underline.Hover"><span style="color:#0787C9;">Sonic Automotive</span></MudLink>
+							</MudCardActions>
+						</MudCard>
+					</MudItem>																									   
+					<MudItem xs="12" sm="4" lg="2" Class="text-center">
+						<MudCard Style="min-height:64px;">
+							<MudCardActions>
+								<MudLink Href="text-the-manager" Style="font-size: 16px; font-weight: 500; text-transform: uppercase;" Class="ml-auto mr-auto" Color="Color.Info" Underline="Underline.Hover"><span style="color:#0787C9;">Solera - LYNX Services</span></MudLink>
+							</MudCardActions>
+						</MudCard>
+					</MudItem>																									   
+					<MudItem xs="12" sm="4" lg="2" Class="text-center">
+						<MudCard Style="min-height:64px;">
+							<MudCardActions>
+								<MudLink Href="text-the-manager" Style="font-size: 16px; font-weight: 500; text-transform: uppercase;" Class="ml-auto mr-auto mt-3 mb-3" Color="Color.Info" Underline="Underline.Hover"><span style="color:#0787C9;">SureCritic</span></MudLink>
+							</MudCardActions>
+						</MudCard>
+					</MudItem>
+				</MudGrid>
+			</MudItem>
+		</MudGrid>
+	</NotAuthorized>
+</AuthorizeView>
+<AuthorizeView Roles="Body321">
+	<Authorized>
+		<MudGrid Style="background: linear-gradient(#fff 20%, #cde7f4 100%);" Justify="Justify.Center">
+		    <MudItem xs=10 sm="6" lg="4" Style="background-color: #fff;" Class="border rounded mt-11 mb-11">
+		        <MudGrid Class="p-4">
+					<MudItem xs="12">
+						<MudExpansionPanels>
+							<MudExpansionPanel Style="background-color:#035583; color: #E3E3E6;" Text="Service">
+								<MudList Clickable="true">
+									<MudListItem Text="Follow-up Results" Href="follow-up-results" />
+									<MudListItem Text="Summary Reporting" />
+									<MudListItem Text="Customer Tracking Report" />
+									<MudListItem Text="On-Line Survey Results" />
+									<MudListItem Text="Enter Customer Information" />
+									<MudListItem Text="Survey Questions" />
+									<MudListItem Text="Referral Certificate" />
+								</MudList>
+							</MudExpansionPanel>
+							<MudExpansionPanel Style="background-color:#035583; color: #E3E3E6;" Text="Prospect - In Person">
+								<MudList Clickable="true">
+									<MudListItem Text="Follow-up Results" Href="follow-up-results" />
+									<MudListItem Text="Overall Summary" Href="overall-summary" />
+									<MudListItem Text="Contact Summary" Href="contact-summary"/>
+								</MudList>
+							</MudExpansionPanel>
+							<MudExpansionPanel Style="background-color:#035583; color: #E3E3E6;" Text="Prospect - Phone Ups">
+								<MudList Clickable="true">
+									<MudListItem Text="Follow-up Results" Href="follow-up-results" />
+									<MudListItem Text="Overall Summary" Href="overall-summary" />
+									<MudListItem Text="Contact Summary" Href="contact-summary"/>
+								</MudList>
+							</MudExpansionPanel>
+							<MudExpansionPanel Style="background-color:#035583; color: #E3E3E6;" Text="Prospect - Internet Ups">
+								<MudList Clickable="true">
+									<MudListItem Text="Follow-up Results" Href="follow-up-results" />
+									<MudListItem Text="Overall Summary" Href="overall-summary" />
+									<MudListItem Text="Contact Summary" Href="contact-summary"/>
+								</MudList>
+							</MudExpansionPanel>
+							<MudExpansionPanel Style="background-color:#035583; color: #E3E3E6;" Text="Go Books">
+								<MudList Clickable="true">
+									<MudListItem Text="Follow-up Results" Href="follow-up-results" />
+								</MudList>
+							</MudExpansionPanel>
+							<MudExpansionPanel Style="background-color:#035583; color: #E3E3E6;" Text="Prospect - Manifest">
+								<MudList Clickable="true">
+									<MudListItem Text="Prospect - Manifest" />
+								</MudList>
+							</MudExpansionPanel>
+							<MudExpansionPanel Style="background-color:#035583; color: #E3E3E6;" Text="Administrative Options">
+								<MudList Clickable="true">
+									<MudListItem Text="Information Center" />
+									<MudListItem Text="Do Not Call Database" />
+									<MudListItem Text="Change Password" />
+								</MudList>
+							</MudExpansionPanel>
+						</MudExpansionPanels>
+						</MudItem>
+		        </MudGrid>   
+			</MudItem>
+		</MudGrid>
+	</Authorized>
+</AuthorizeView>
+<AuthorizeView Roles="AppliedConcepts">
+	<Authorized>
+		<MudGrid Style="background: linear-gradient(#fff 20%, #cde7f4 100%);" Justify="Justify.Center">
+		    <MudItem xs=10 sm="6" lg="4" Style="background-color: #fff;" Class="border rounded mt-11 mb-11">
+		        <MudGrid Class="p-4">
+		            <MudItem xs="12">
+						<MudExpansionPanels>
+							<MudExpansionPanel Style="background-color:#035583; color: #E3E3E6;" Text="Follow-up Results">
+								<MudList Clickable="true">
+									<MudListItem Text="Follow-up Results" />
+								</MudList>
+							</MudExpansionPanel>
+							<MudExpansionPanel Style="background-color:#035583; color: #E3E3E6;" Text="Summary Reporting">
+								<MudList Clickable="true">
+									<MudListItem Text="Location Summary" />
+									<MudListItem Text="Insurance Co Summary" />
+									<MudListItem Text="Technician Summary" />
+									<MudListItem Text="CSR Summary" />
+									<MudListItem Text="Trend Report" />
+								</MudList>
+							</MudExpansionPanel>
+							<MudExpansionPanel Style="background-color:#035583; color: #E3E3E6;" Text="Customer Tracking Report (CTR)">
+								<MudList Clickable="true">
+									<MudListItem Text="Customer Tracking Report (CTR)" />
+								</MudList>
+							</MudExpansionPanel>
+							<MudExpansionPanel Style="background-color:#035583; color: #E3E3E6;" Text="Upload Customer Contact Information">
+								<MudList Clickable="true">
+									<MudListItem AdornmentColor="Color.Inherit" Text="Email Programs (Standard Program)" >
+										<NestedList>
+									        <MudListItem Text="CRI - Standard Upload Template"/>
+									        <MudListItem Text="GTS template - For GTS system users only"/>
+											<MudListItem Text="Mainstreet template - Mainstreet system users only" />
+									    </NestedList>
+									</MudListItem>
+									<MudListItem AdornmentColor="Color.Inherit" Text="Live Agent Telephone Program ($2.75/Survey)">
+										<NestedList>
+											<MudListItem Text="CRI - Standard Upload Template" />
+											<MudListItem Text="GTS template - For GTS system users only" />
+											<MudListItem Text="Mainstreet template - Mainstreet system users only" />
+										</NestedList>
+									</MudListItem>
+								</MudList>
+							</MudExpansionPanel>
+						</MudExpansionPanels>
+					</MudItem>
+		        </MudGrid>   
+			</MudItem>
+		</MudGrid>
+	</Authorized>
+</AuthorizeView>
+<AuthorizeView Roles="ProStarsCSI-Facility">
+	<Authorized>
+		<MudGrid Style="background: linear-gradient(#fff 20%, #cde7f4 100%);" Justify="Justify.Center">
+			<MudItem xs=10 sm="6" lg="4" Style="background-color: #fff;" Class="border rounded mt-11 mb-11">
+				<MudGrid Class="p-4">
+					<MudItem xs="12">
+						<MudExpansionPanels>
+							<MudExpansionPanel Style="background-color:#035583; color: #E3E3E6;" Text="Follow-up Results">
+								<MudList Clickable="true">
+									<MudListItem Text="Follow-up Results" />
+								</MudList>
+							</MudExpansionPanel>
+							<MudExpansionPanel Style="background-color:#035583; color: #E3E3E6;" Text="Summary Reporting">
+								<MudList Clickable="true">
+									<MudListItem Text="Summary Reporting" />
+								</MudList>
+							</MudExpansionPanel>
+							<MudExpansionPanel Style="background-color:#035583; color: #E3E3E6;" Text="Advisor Summary Reporting">
+								<MudList Clickable="true">
+									<MudListItem Text="Advisor Summary Reporting" />
+								</MudList>
+							</MudExpansionPanel>
+							<MudExpansionPanel Style="background-color:#035583; color: #E3E3E6;" Text="Enter Customer Information">
+								<MudList Clickable="true">
+									<MudListItem Text="Enter Customer Information" />
+								</MudList>
+							</MudExpansionPanel>
+						</MudExpansionPanels>
+					</MudItem>
+				</MudGrid>
+			</MudItem>
+		</MudGrid>
+	</Authorized>
+</AuthorizeView>
+@code{
+	[Parameter]
+	public bool isloggedout { get; set; }
+
+	protected override void OnInitialized()
+	{
+		if(isloggedout == true)
+		{
+			snackBar.Add("Logged Out Successfully...!", Severity.Success);
+		}
+		else
+		{
+			isloggedout = false;
+		}
+    }
+}

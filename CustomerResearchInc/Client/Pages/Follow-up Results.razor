@@ -1,0 +1,648 @@
+﻿@page "/follow-up-results"
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+@inject HttpClient Http
+@inject IJSRuntime Js
+
+
+<MudGrid Style="background-color:#035583;" Justify="Justify.Center">
+	<MudItem xs="10">
+		<MudText Style="color:#E3E3E6; font-size: 18px; text-transform:uppercase;">Follow-up Results</MudText>
+	</MudItem>
+</MudGrid>
+
+<MudGrid Justify="Justify.Center">
+	<MudItem xs="10">
+		<MudGrid Class="mt-3 border rounded-2" Justify="Justify.Center">
+			<MudItem xs="2">
+				<MudText Align="Align.End" Style="font-size: 14px; font-weight: bold;" Class="mt-5">From Date :</MudText>
+			</MudItem>
+			<MudItem xs="2">
+				<MudDatePicker Label="From" Variant="MudBlazor.Variant.Outlined" MaxDate="DateTime.Now" @bind-Date="FromDate"></MudDatePicker>
+			</MudItem>
+			<MudItem xs="1">
+				<MudText Align="Align.End" Style="font-size: 14px; font-weight: bold;" Class="mt-5">To Date :</MudText>
+			</MudItem>
+			<MudItem xs="2">
+				<MudDatePicker Label="To" Variant="MudBlazor.Variant.Outlined" MaxDate="DateTime.Now" @bind-Date="ToDate"></MudDatePicker>
+			</MudItem>
+			<MudItem xs="4">
+				<MudButton Variant="MudBlazor.Variant.Filled" Color="Color.Info" OnClick="() => FilterWithDate()">Filter</MudButton>
+				<MudButton Variant="MudBlazor.Variant.Filled" Class="ml-3" Color="Color.Info" OnClick="() => Reset()">Reset</MudButton>
+				<MudIconButton Class="ml-2" OnClick="() => ExportToExcel()" Color="Color.Default">
+					<MudAvatar>
+						<MudImage Src="Images/ExcelIcon.png"></MudImage>
+					</MudAvatar>
+				</MudIconButton>
+				<MudIconButton OnClick="() => DownloadAsPdf()" Icon="@Icons.Material.Filled.Print" Color="Color.Default" />
+			</MudItem>
+		</MudGrid>
+	</MudItem>
+</MudGrid>
+
+<MudGrid Class="mt-10" Style="background: linear-gradient(#fff 20%, #cde7f4 100%);" Justify="Justify.Center">
+	<MudItem xs="10" Class="text-center">
+		<MudDataGrid T="Customer" Items="customers" Hover="true" Filterable="true" QuickFilter="new Func<Customer, bool>(Search)" Dense="true" Elevation="2">
+			<ToolBarContent>
+				<MudText Typo="Typo.h6">Follow-up Results</MudText>
+				<MudSpacer />
+				<MudTextField @bind-Value="searchString" Placeholder="Enter customer name" Adornment="Adornment.Start" Immediate="true"
+							  AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+			</ToolBarContent>
+			<Columns>
+				<PropertyColumn Property="c => c.SrNo" Title="S.No" Filterable="false" />
+				<PropertyColumn Property="c => c.Date.ToShortDateString()" Title="Date" />
+				<PropertyColumn Property="@(c => c.Comments.Equals("") ? "Completely Satisfied" : "Comment")" Title="Status" />
+				<PropertyColumn Property="c => c.LaborType" Title="Type" />
+				<PropertyColumn Property="c => c.OvarallCSI" Title="CSI" />
+				<PropertyColumn Property="c => c.TelePhone" Title="TelePhone" />
+				<PropertyColumn Property="c => c.FirstName" Title="First Name" />
+				<PropertyColumn Property="c => c.LastName" Title="Last Name" />
+				<TemplateColumn T="Customer" Context="customer" Title="CTR" Filterable="false" Sortable="false">
+					<CellTemplate>
+						<MudIconButton Icon="@Icons.Material.Outlined.Create" OnClick="()=>CreateCtr(customer.Item.Id)" Variant="MudBlazor.Variant.Filled" Color="Color.Info" Size="Size.Small" />
+					</CellTemplate>
+				</TemplateColumn>
+				<TemplateColumn T="Customer" Context="customer" Title="View" Filterable="false" Sortable="false">
+					<CellTemplate>
+						<MudIconButton Icon="@Icons.Material.Outlined.Preview" OnClick="()=>ViewReport(customer.Item.Id)" Variant="MudBlazor.Variant.Filled" Color="Color.Info" Size="Size.Small" />
+					</CellTemplate>
+				</TemplateColumn>
+			</Columns>
+			<PagerContent>
+				<MudDataGridPager PageSizeOptions="new int[] {5, 10, 15, 20, 50, 100}" />
+			</PagerContent>
+		</MudDataGrid>
+	</MudItem>
+</MudGrid>
+
+<MudDialog @bind-IsVisible="viewReport" Options="dialogOptions">
+	<TitleContent>
+		<MudText Typo="Typo.h5" Style="text-transform:uppercase; font-weight: bold;">Follow-up Results</MudText>
+    </TitleContent>
+    <DialogContent>
+		<MudContainer Style="max-height: 435px; overflow-y: scroll">
+			<MudGrid Spacing="1">
+				<MudItem xs="2">
+					<MudText Style="font-size: 14px; font-weight: bold;">Customer Name</MudText>
+			    </MudItem>
+			    <MudItem xs="1" Class="text-center">
+					<MudText Style="font-size: 14px; font-weight: bold;">:</MudText>
+			    </MudItem>
+				<MudItem xs="3">
+					<MudText Style="font-size: 14px;">@customer.FirstName @customer.LastName</MudText>
+				</MudItem>
+				<MudItem xs="2">
+					<MudText Style="font-size: 14px; font-weight: bold;">Telephone</MudText>
+				</MudItem>
+				<MudItem xs="1" Class="text-center">
+					<MudText Style="font-size: 14px; font-weight: bold;">:</MudText>
+				</MudItem>
+				<MudItem xs="3">
+					<MudText Style="font-size: 14px;">@customer.TelePhone</MudText>
+				</MudItem>
+				<MudItem xs="2">
+					<MudText Style="font-size: 14px; font-weight: bold;">Overall CSI</MudText>
+				</MudItem>
+				<MudItem xs="1" Class="text-center">
+					<MudText Style="font-size: 14px; font-weight: bold;">:</MudText>
+				</MudItem>
+				<MudItem xs="3">
+					<MudText Style="font-size: 14px;">@customer.OvarallCSI</MudText>
+				</MudItem>
+				<MudItem xs="2">
+					<MudText Style="font-size: 14px; font-weight: bold;">Vehicle</MudText>
+				</MudItem>
+				<MudItem xs="1" Class="text-center">
+					<MudText Style="font-size: 14px; font-weight: bold;">:</MudText>
+				</MudItem>
+				<MudItem xs="3">
+					<MudText Style="font-size: 14px;">@customer.Vehicle</MudText>
+				</MudItem>
+				<MudItem xs="2">
+					<MudText Style="font-size: 14px; font-weight: bold;">Advisor</MudText>
+			    </MudItem>
+			    <MudItem xs="1" Class="text-center">
+					<MudText Style="font-size: 14px; font-weight: bold;">:</MudText>
+			    </MudItem>
+				<MudItem xs="3">
+					<MudText Style="font-size: 14px;">@customer.Advisor</MudText>
+				</MudItem>
+				<MudItem xs="2">
+					<MudText Style="font-size: 14px; font-weight: bold;">Technician</MudText>
+				</MudItem>
+				<MudItem xs="1" Class="text-center">
+					<MudText Style="font-size: 14px; font-weight: bold;">:</MudText>
+				</MudItem>
+				<MudItem xs="3">
+					<MudText Style="font-size: 14px;">@customer.Technician</MudText>
+				</MudItem>
+				<MudItem xs="2">
+					<MudText Style="font-size: 14px; font-weight: bold;">Labor Type</MudText>
+			    </MudItem>
+			    <MudItem xs="1" Class="text-center">
+					<MudText Style="font-size: 14px; font-weight: bold;">:</MudText>
+			    </MudItem>
+				<MudItem xs="3">
+					<MudText Style="font-size: 14px;">@customer.LaborType</MudText>
+				</MudItem>
+				<MudItem xs="2">
+					<MudText Style="font-size: 14px; font-weight: bold;">RO No. /Cust No.</MudText>
+				</MudItem>
+				<MudItem xs="1" Class="text-center">
+					<MudText Style="font-size: 14px; font-weight: bold;">:</MudText>
+				</MudItem>
+				<MudItem xs="3">
+					<MudText Style="font-size: 14px;">@customer.CustNo</MudText>
+				</MudItem>
+				<MudItem xs="2">
+					<MudText Style="font-size: 14px; font-weight: bold;">RO Date</MudText>
+			    </MudItem>
+			    <MudItem xs="1" Class="text-center">
+					<MudText Style="font-size: 14px; font-weight: bold;">:</MudText>
+			    </MudItem>
+				<MudItem xs="3">
+					<MudText Style="font-size: 14px;">@customer.Date.ToShortDateString()</MudText>
+				</MudItem>
+				<MudItem xs="2">
+					<MudText Style="font-size: 14px; font-weight: bold;">VIN No.</MudText>
+				</MudItem>
+				<MudItem xs="1" Class="text-center">
+					<MudText Style="font-size: 14px; font-weight: bold;">:</MudText>
+				</MudItem>
+				<MudItem xs="3">
+					<MudText Style="font-size: 14px;">@customer.VINno</MudText>
+				</MudItem>
+				<MudItem xs="2">
+					<MudText Style="font-size: 14px; font-weight: bold;">Call Center Agent</MudText>
+				</MudItem>
+				<MudItem xs="1" Class="text-center">
+					<MudText Style="font-size: 14px; font-weight: bold;">:</MudText>
+				</MudItem>
+				<MudItem xs="3">
+					<MudText Style="font-size: 14px;">@customer.CallCenterAgent</MudText>
+				</MudItem>
+			</MudGrid>
+			<MudGrid Class="mt-8">
+				<MudItem xs="6" Class="border">
+					<MudGrid Spacing="1">
+						<MudItem xs="6">
+							<MudText Style="font-size: 16px; font-weight: bold; text-decoration:underline;">Question</MudText>
+						</MudItem>
+						<MudItem xs="6">
+							<MudText Style="font-size: 16px; font-weight: bold; text-decoration:underline;">Score</MudText>
+						</MudItem>
+						<MudItem xs="4">
+							<MudText Style="font-size: 14px; font-weight: bold;">1. Overall</MudText>
+						</MudItem>
+						<MudItem xs="2" Class="text-center">
+							<MudText Style="font-size: 14px; font-weight: bold;">:</MudText>
+						</MudItem>
+						<MudItem xs="6">
+							<MudText Style="font-size: 14px;">@(customer.Q1 ? "Yes" : "No")</MudText>
+						</MudItem>
+						<MudItem xs="4">
+							<MudText Style="font-size: 14px; font-weight: bold;">2. Ready</MudText>
+						</MudItem>
+						<MudItem xs="2" Class="text-center">
+							<MudText Style="font-size: 14px; font-weight: bold;">:</MudText>
+						</MudItem>
+						<MudItem xs="6">
+							<MudText Style="font-size: 14px;">@(customer.Q2 ? "Yes" : "No")</MudText>
+						</MudItem>
+						<MudItem xs="4">
+							<MudText Style="font-size: 14px; font-weight: bold;">3. Courtesy</MudText>
+						</MudItem>
+						<MudItem xs="2" Class="text-center">
+							<MudText Style="font-size: 14px; font-weight: bold;">:</MudText>
+						</MudItem>
+						<MudItem xs="6">
+							<MudText Style="font-size: 14px;">@(customer.Q3 ? "Yes" : "No")</MudText>
+						</MudItem>
+						<MudItem xs="4">
+							<MudText Style="font-size: 14px; font-weight: bold;">4. Communication</MudText>
+						</MudItem>
+						<MudItem xs="2" Class="text-center">
+							<MudText Style="font-size: 14px; font-weight: bold;">:</MudText>
+						</MudItem>
+						<MudItem xs="6">
+							<MudText Style="font-size: 14px;">@(customer.Q4 ? "Yes" : "No")</MudText>
+						</MudItem>
+						<MudItem xs="4">
+							<MudText Style="font-size: 14px; font-weight: bold;">5. Quality</MudText>
+						</MudItem>
+						<MudItem xs="2" Class="text-center">
+							<MudText Style="font-size: 14px; font-weight: bold;">:</MudText>
+						</MudItem>
+						<MudItem xs="6">
+							<MudText Style="font-size: 14px;">@(customer.Q5 ? "Yes" : "No")</MudText>
+						</MudItem>
+						<MudItem xs="4">
+							<MudText Style="font-size: 14px; font-weight: bold;">6. Recommend</MudText>
+						</MudItem>
+						<MudItem xs="2" Class="text-center">
+							<MudText Style="font-size: 14px; font-weight: bold;">:</MudText>
+						</MudItem>
+						<MudItem xs="6">
+							<MudText Style="font-size: 14px;">@(customer.Q6 ? "Yes" : "No")</MudText>
+						</MudItem>
+						<MudItem xs="4">
+							<MudText Style="font-size: 14px; font-weight: bold;">7. Sales Lead</MudText>
+						</MudItem>
+						<MudItem xs="2" Class="text-center">
+							<MudText Style="font-size: 14px; font-weight: bold;">:</MudText>
+						</MudItem>
+						<MudItem xs="6">
+							<MudText Style="font-size: 14px;">@(customer.Q7 ? "Yes" : "No")</MudText>
+						</MudItem>
+						<MudItem xs="4">
+							<MudText Style="font-size: 14px; font-weight: bold;">8. Return Survey</MudText>
+						</MudItem>
+						<MudItem xs="2" Class="text-center">
+							<MudText Style="font-size: 14px; font-weight: bold;">:</MudText>
+						</MudItem>
+						<MudItem xs="6">
+							<MudText Style="font-size: 14px;">@(customer.Q8 ? "Yes" : "No")</MudText>
+						</MudItem>
+						<MudItem xs="4">
+							<MudText Style="font-size: 14px; font-weight: bold;">9. Email Address</MudText>
+						</MudItem>
+						<MudItem xs="2" Class="text-center">
+							<MudText Style="font-size: 14px; font-weight: bold;">:</MudText>
+						</MudItem>
+						<MudItem xs="6">
+							<MudText Style="font-size: 14px;">@customer.Q9</MudText>
+						</MudItem>
+					</MudGrid>
+				</MudItem>
+				<MudItem xs="6" Class="border">
+					<MudGrid>
+						<MudItem xs="12">
+							<MudText Align="Align.Center" Style="font-size: 16px; text-decoration:underline; font-weight: bold;">Comments</MudText>
+							<MudText Style="font-size: 14px;">@(customer.Comments == "" ? "Completely satisfied customer. No added comments." : customer.Comments)</MudText>
+						</MudItem>
+					</MudGrid>
+				</MudItem>
+			</MudGrid>
+		</MudContainer>
+    </DialogContent>
+	<DialogActions>
+		<MudButton Variant="MudBlazor.Variant.Filled" Style="text-transform:none;" Size="Size.Small" Color="Color.Info" Class="mr-4 mb-2" OnClick="() => GoBack()">Go Back</MudButton>
+    </DialogActions>
+</MudDialog>
+
+<MudDialog @bind-IsVisible="viewCTR" Options="dialogOptions">
+	<TitleContent>
+			<MudText Typo="Typo.h5" Style="text-transform:uppercase; font-weight: bold;">Customer Tracking Report (CTR)</MudText>
+	</TitleContent>
+	<DialogContent>
+		<MudContainer Style="max-height: 435px; overflow-y: scroll">
+				<MudGrid Spacing="1">
+					<MudItem xs="12">
+						<MudText Typo="Typo.h6" Style="font-weight: bold;" Class="border-bottom">Customer Information</MudText>
+					</MudItem>
+				<MudItem xs="2">
+					<MudText Style="font-size: 14px; font-weight: bold;">Customer Name</MudText>
+				</MudItem>
+				<MudItem xs="1" Class="text-center">
+					<MudText Style="font-size: 14px; font-weight: bold;">:</MudText>
+				</MudItem>
+				<MudItem xs="3">
+					<MudText Style="font-size: 14px;">@customer.FirstName @customer.LastName</MudText>
+				</MudItem>
+				<MudItem xs="2">
+					<MudText Style="font-size: 14px; font-weight: bold;">Telephone</MudText>
+				</MudItem>
+				<MudItem xs="1" Class="text-center">
+					<MudText Style="font-size: 14px; font-weight: bold;">:</MudText>
+				</MudItem>
+				<MudItem xs="3">
+					<MudText Style="font-size: 14px;">@customer.TelePhone</MudText>
+				</MudItem>
+				<MudItem xs="2">
+					<MudText Style="font-size: 14px; font-weight: bold;">Overall CSI</MudText>
+				</MudItem>
+				<MudItem xs="1" Class="text-center">
+					<MudText Style="font-size: 14px; font-weight: bold;">:</MudText>
+				</MudItem>
+				<MudItem xs="3">
+					<MudText Style="font-size: 14px;">@customer.OvarallCSI</MudText>
+				</MudItem>
+				<MudItem xs="2">
+					<MudText Style="font-size: 14px; font-weight: bold;">Vehicle</MudText>
+				</MudItem>
+				<MudItem xs="1" Class="text-center">
+					<MudText Style="font-size: 14px; font-weight: bold;">:</MudText>
+				</MudItem>
+				<MudItem xs="3">
+					<MudText Style="font-size: 14px;">@customer.Vehicle</MudText>
+				</MudItem>
+				<MudItem xs="2">
+					<MudText Style="font-size: 14px; font-weight: bold;">Advisor</MudText>
+				</MudItem>
+				<MudItem xs="1" Class="text-center">
+					<MudText Style="font-size: 14px; font-weight: bold;">:</MudText>
+				</MudItem>
+				<MudItem xs="3">
+					<MudText Style="font-size: 14px;">@customer.Advisor</MudText>
+				</MudItem>
+				<MudItem xs="2">
+					<MudText Style="font-size: 14px; font-weight: bold;">Technician</MudText>
+				</MudItem>
+				<MudItem xs="1" Class="text-center">
+					<MudText Style="font-size: 14px; font-weight: bold;">:</MudText>
+				</MudItem>
+				<MudItem xs="3">
+					<MudText Style="font-size: 14px;">@customer.Technician</MudText>
+				</MudItem>
+				<MudItem xs="2">
+					<MudText Style="font-size: 14px; font-weight: bold;">Labor Type</MudText>
+				</MudItem>
+				<MudItem xs="1" Class="text-center">
+					<MudText Style="font-size: 14px; font-weight: bold;">:</MudText>
+				</MudItem>
+				<MudItem xs="3">
+					<MudText Style="font-size: 14px;">@customer.LaborType</MudText>
+				</MudItem>
+				<MudItem xs="2">
+					<MudText Style="font-size: 14px; font-weight: bold;">RO No. /Cust No.</MudText>
+				</MudItem>
+				<MudItem xs="1" Class="text-center">
+					<MudText Style="font-size: 14px; font-weight: bold;">:</MudText>
+				</MudItem>
+				<MudItem xs="3">
+					<MudText Style="font-size: 14px;">@customer.CustNo</MudText>
+				</MudItem>
+				<MudItem xs="2">
+					<MudText Style="font-size: 14px; font-weight: bold;">RO Date</MudText>
+				</MudItem>
+				<MudItem xs="1" Class="text-center">
+					<MudText Style="font-size: 14px; font-weight: bold;">:</MudText>
+				</MudItem>
+				<MudItem xs="3">
+					<MudText Style="font-size: 14px;">@customer.Date.ToShortDateString()</MudText>
+				</MudItem>
+				<MudItem xs="2">
+					<MudText Style="font-size: 14px; font-weight: bold;">VIN No.</MudText>
+				</MudItem>
+				<MudItem xs="1" Class="text-center">
+					<MudText Style="font-size: 14px; font-weight: bold;">:</MudText>
+				</MudItem>
+				<MudItem xs="3">
+					<MudText Style="font-size: 14px;">@customer.VINno</MudText>
+				</MudItem>
+				<MudItem xs="2">
+					<MudText Style="font-size: 14px; font-weight: bold;">Call Center Agent</MudText>
+				</MudItem>
+				<MudItem xs="1" Class="text-center">
+					<MudText Style="font-size: 14px; font-weight: bold;">:</MudText>
+				</MudItem>
+				<MudItem xs="3">
+					<MudText Style="font-size: 14px;">@customer.CallCenterAgent</MudText>
+				</MudItem>
+			</MudGrid>
+			<MudGrid Class="mt-6" Spacing="1">
+				<MudItem xs="12">
+						<MudText Typo="Typo.h6" Style="font-weight: bold;" Class="border-bottom">Initial Status/Customer Comments</MudText>
+				</MudItem>
+				<MudItem xs="12">
+						<MudText Typo="Typo.subtitle1" Style="font-weight: bold; text-transform:uppercase;">@(customer.Comments == "" ? "Completely Satisfied" : "Comment")</MudText>
+				</MudItem>
+				<MudItem xs="12">
+						<MudText Style="font-size: 14px;">@(customer.Comments == "" ? "Completely satisfied customer. No added comments." : customer.Comments)</MudText>
+				</MudItem>
+			</MudGrid>
+				<MudGrid Class="mt-6" Spacing="1">
+					<MudItem xs="12">
+						<MudText Typo="Typo.h6" Style="font-weight: bold;" Class="border-bottom">CTR Action Plan</MudText>
+					</MudItem>
+					<MudItem xs="4" Class="mt-2">
+						<MudText Style="font-size: 14px; font-weight: bold;">CTR Status</MudText>
+					</MudItem>
+					<MudItem xs="1" Class="mt-2 text-center">
+						<MudText Style="font-size: 14px; font-weight: bold;">:</MudText>
+					</MudItem>
+					<MudItem xs="7">
+						<MudRadioGroup @bind-SelectedOption="CtrStatus" Required="true">
+							<MudRadio Option="true" Size="Size.Small" Dense="false">Open</MudRadio>
+							<MudRadio Option="false" Size="Size.Small" Dense="false">Closed</MudRadio>
+						</MudRadioGroup>
+					</MudItem>
+					<MudItem xs="4" Class="mt-3">
+						<MudText Style="font-size: 14px; font-weight: bold;">Responsible Manager</MudText>
+					</MudItem>
+					<MudItem xs="1" Class="mt-3 text-center">
+						<MudText Style="font-size: 14px; font-weight: bold;">:</MudText>
+					</MudItem>
+					<MudItem xs="7">
+						<MudTextField Label="Responsible Manager" @bind-Value="Manager" Margin="Margin.Dense" Variant="MudBlazor.Variant.Outlined"/>
+					</MudItem>
+					<MudItem xs="4" Class="mt-3">
+						<MudText Style="font-size: 14px; font-weight: bold;">Action Plan (with dates)</MudText>
+					</MudItem>
+					<MudItem xs="1" Class="mt-3 text-center">
+						<MudText Style="font-size: 14px; font-weight: bold;">:</MudText>
+					</MudItem>
+					<MudItem xs="7">
+						<MudTextField Label="Action Plan (with dates)" @bind-Value="ActionPlan" Lines="3" Margin="Margin.Dense" Variant="MudBlazor.Variant.Outlined"/>
+					</MudItem>
+					<MudItem xs="4" Class="mt-3">
+						<MudText Style="font-size: 14px; font-weight: bold;">Results of Action Plan (with dates)</MudText>
+					</MudItem>
+					<MudItem xs="1" Class="mt-3 text-center">
+						<MudText Style="font-size: 14px; font-weight: bold;">:</MudText>
+					</MudItem>
+					<MudItem xs="7">
+						<MudTextField Label="Results of Action Plan (with dates)" @bind-Value="ActionPlanResult" Lines="3" Margin="Margin.Dense" Variant="MudBlazor.Variant.Outlined" />
+					</MudItem>
+				</MudGrid>
+		</MudContainer>
+	</DialogContent>
+	<DialogActions>
+		<div class="mr-auto">
+			<MudButton Variant="MudBlazor.Variant.Filled" Style="text-transform:none;" Size="Size.Small" Color="Color.Info" Class="ml-4 mb-2" OnClick="() => GoBack1()">Cancel</MudButton>
+			<MudButton Variant="MudBlazor.Variant.Filled" Style="text-transform:none;" Size="Size.Small" Color="Color.Error" Class="ml-2 mb-2">Delete</MudButton>
+			<MudButton Variant="MudBlazor.Variant.Filled" Style="text-transform:none;" Size="Size.Small" Color="Color.Info" Class="ml-2 mb-2">Help</MudButton>
+		</div>
+		<MudButton Variant="MudBlazor.Variant.Filled" Style="text-transform:none;" Size="Size.Small" Color="Color.Info" Class="mr-4 mb-2">Submit</MudButton>
+	</DialogActions>
+</MudDialog>
+
+@code {
+	private List<Customer> customers = new List<Customer>();
+	private Customer customer = new Customer();
+	private List<Customer> customers1 = new List<Customer>();
+	private List<Customer_Export> customer_Exports = new List<Customer_Export>();
+	private string searchString = "";
+	private DateTime? FromDate = DateTime.Now;
+	private DateTime? ToDate = DateTime.Now;
+	public bool viewCTR = false;
+	public bool viewReport = false;
+	private MudBlazor.DialogOptions dialogOptions = new() { FullWidth = true, DisableBackdropClick = true, MaxWidth = MaxWidth.Medium };
+	public bool CtrStatus = false;
+	private string Manager = "";
+	private string ActionPlan = "";
+	private string ActionPlanResult = "";
+
+
+	protected override async Task OnInitializedAsync()
+	{
+		var result = await Http.GetFromJsonAsync<List<Customer>>($"api/Customer");
+		if (result != null)
+		{
+			customers = result;
+		}
+	}
+
+	private bool Search(Customer customer)
+	{
+		if (customer.FirstName != null && customer.LastName != null &&
+			(customer.FirstName.Contains(searchString, StringComparison.OrdinalIgnoreCase) ||
+			customer.LastName.Contains(searchString, StringComparison.OrdinalIgnoreCase)))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	private async Task FilterWithDate()
+	{
+		var date1 = FromDate.ToString();
+		string[] strings1 = date1.ToString().Split(' ');
+		string[] strings2 = strings1[0].ToString().Split('/');
+		var day1 = Convert.ToInt32(strings2[0]);
+		var month1 = Convert.ToInt32(strings2[1]);
+		var year1 = Convert.ToInt32(strings2[2]);
+
+		var date2 = ToDate.ToString();
+		string[] strings3 = date2.ToString().Split(' ');
+		string[] strings4 = strings3[0].ToString().Split('/');
+		var day2 = Convert.ToInt32(strings4[0]);
+		var month2 = Convert.ToInt32(strings4[1]);
+		var year2 = Convert.ToInt32(strings4[2]);
+
+		var result = await Http.GetFromJsonAsync<List<Customer>>("api/Customer");
+		if (result != null)
+		{
+			customers1 = result;
+		}
+
+		var result1 = customers1.Where(c => (c.Date > new DateTime(year1, day1, month1) || c.Date == new DateTime(year1, day1, month1)) && (c.Date < new DateTime(year2, day2, month2) || c.Date == new DateTime(year2, day2, month2))).ToList();
+		customers = result1;
+	}
+
+	private async Task Reset()
+	{
+		var result = await Http.GetFromJsonAsync<List<Customer>>("api/Customer");
+		if (result != null)
+		{
+			customers = result;
+		}
+	}
+
+	private async Task ExportToExcel()
+	{
+		foreach (var customer in customers)
+		{
+			Customer_Export customer_Export = new Customer_Export {
+			Advisor = customer.Advisor,
+			CallCenterAgent = customer.CallCenterAgent,
+			Comments = customer.Comments,
+			Date = customer.Date,
+			FirstName = customer.FirstName,
+			LastName = customer.LastName,
+			LaborType = customer.LaborType,
+			OvarallCSI = customer.OvarallCSI,
+			SrNo = customer.SrNo,
+			Technician = customer.Technician,
+			TelePhone = customer.TelePhone,
+			Vehicle = customer.Vehicle,
+			VINno = customer.VINno
+			};
+
+			customer_Exports.Add(customer_Export);
+		}
+		var response = await Http.PostAsJsonAsync("api/Customer/exporttoexcel", customer_Exports);
+		if (!response.IsSuccessStatusCode)
+		{
+			await Js.InvokeVoidAsync("alert", "Error in export to excel file. Please try again.");
+		}
+		else
+		{
+			var fileStream = response.Content.ReadAsStream();
+			using var streamRef = new DotNetStreamReference(stream: fileStream);
+			await Js.InvokeVoidAsync("downloadFileFromStream", $"Customers_{DateTime.Now.ToString("dd-MM-yyyy hhmmss")}.xlsx", streamRef);
+		}
+	}
+
+	private async Task DownloadAsPdf()
+	{
+		foreach (var customer in customers)
+		{
+			Customer_Export customer_Export = new Customer_Export
+				{
+					Advisor = customer.Advisor,
+					CallCenterAgent = customer.CallCenterAgent,
+					Comments = customer.Comments,
+					Date = customer.Date,
+					FirstName = customer.FirstName,
+					LastName = customer.LastName,
+					LaborType = customer.LaborType,
+					OvarallCSI = customer.OvarallCSI,
+					SrNo = customer.SrNo,
+					Technician = customer.Technician,
+					TelePhone = customer.TelePhone,
+					Vehicle = customer.Vehicle,
+					VINno = customer.VINno
+				};
+
+			customer_Exports.Add(customer_Export);
+		}
+		var response = await Http.PostAsJsonAsync($"api/Customer/pdf", customer_Exports);
+		if (!response.IsSuccessStatusCode)
+		{
+			await Js.InvokeVoidAsync("alert", "Error in pdf generation. Please try again.");
+		}
+		else
+		{
+			var fileStream = response.Content.ReadAsStream();
+			using var streamRef = new DotNetStreamReference(stream: fileStream);
+			await Js.InvokeVoidAsync("downloadFileFromStream", $"CustomersReport_{DateTime.Now.ToString("dd-MM-yyyy hhmmss")}.pdf", streamRef);
+		}
+	}
+
+	private async Task ViewReport(int id)
+	{
+		viewReport = true;
+		var result = await Http.GetFromJsonAsync<Customer>($"api/Customer/{id}");
+		if (result != null)
+		{
+			customer = result;
+		}
+	}
+
+	void GoBack()
+	{
+		viewReport = false;
+		customer = new Customer();
+	}
+
+	private async Task CreateCtr(int id)
+	{
+		viewCTR = true;
+		var result = await Http.GetFromJsonAsync<Customer>($"api/Customer/{id}");
+		if (result != null)
+		{
+			customer = result;
+		}
+	}
+
+	void GoBack1()
+	{
+		viewCTR = false;
+		customer = new Customer();
+	}
+}

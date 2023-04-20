@@ -1,0 +1,65 @@
+﻿@page "/overall-summary"
+
+<MudGrid Style="background-color:#035583;" Justify="Justify.Center">
+	<MudItem xs="10">
+		<MudText Style="color:#E3E3E6; font-size: 18px;" Class="mb-2">Launch Report</MudText>
+	</MudItem>
+</MudGrid>
+<MudGrid Style="background: linear-gradient(#fff 20%, #cde7f4 100%);" Justify="Justify.Center">
+	<MudItem xs="10">
+		<MudGrid Class="mt-3 mb-3 border rounded-2" Justify="Justify.Center">
+			<MudItem xs="11">
+				<MudText Style="font-size: 16px; font-weight: bold;">Prospect (Phone Ups) Contact Summary</MudText>
+			</MudItem>
+			<MudItem xs="2" Class="mt-2">
+				<MudText Style="font-size: 14px; font-weight: bold;">Report Date</MudText>
+			</MudItem>
+			<MudItem xs="1" Class="mt-2 text-center">
+				<MudText Style="font-size: 14px; font-weight: bold;">:</MudText>
+			</MudItem>
+			<MudItem xs="4">
+				<MudSelect Label="Select month" T="string" Margin="Margin.Dense" Required="true" Variant="MudBlazor.Variant.Outlined" @bind-Value="Month">
+					<MudSelectItem Value="@("January")" />
+					<MudSelectItem Value="@("February")" />
+					<MudSelectItem Value="@("March")" />
+					<MudSelectItem Value="@("April")" />
+					<MudSelectItem Value="@("May")" />
+					<MudSelectItem Value="@("June")" />
+					<MudSelectItem Value="@("July")" />
+					<MudSelectItem Value="@("August")" />
+					<MudSelectItem Value="@("September")" />
+					<MudSelectItem Value="@("October")" />
+					<MudSelectItem Value="@("November")" />
+					<MudSelectItem Value="@("December")" />
+				</MudSelect>
+			</MudItem>
+			<MudItem xs="4">
+				<MudSelect Label="Select year" T="string" Margin="Margin.Dense" Required="true" Variant="MudBlazor.Variant.Outlined" @bind-Value="Year">
+					<MudSelectItem Value="@("2013")" />
+					<MudSelectItem Value="@("2014")" />
+					<MudSelectItem Value="@("2015")" />
+					<MudSelectItem Value="@("2016")" />
+					<MudSelectItem Value="@("2017")" />
+					<MudSelectItem Value="@("2018")" />
+					<MudSelectItem Value="@("2019")" />
+					<MudSelectItem Value="@("2020")" />
+					<MudSelectItem Value="@("2021")" />
+					<MudSelectItem Value="@("2022")" />
+					<MudSelectItem Value="@("2023")" />
+				</MudSelect>
+			</MudItem>
+			<MudItem xs="12" Class="text-center">
+				<MudButton Class="mb-4" Style="text-transform: none;" Color="Color.Info" Variant="MudBlazor.Variant.Filled">Launch Report</MudButton>
+			</MudItem>
+			<MudItem xs="9" Class="text-center">
+				<MudText Style="font-size: 16px;">This is a live generated WebExcel report. You will need Microsoft Excel(R) 2000 or better to view it (Microsoft Excel(R) XP or better recommended).  Microsoft(R) also provides a free Excel(R) 2003 Viewer that you can download and use to view and print these reports (see viewer link above).</MudText>
+				<MudLink Href="http://www.microsoft.com/downloads/details.aspx?FamilyID=c8378bf4-996c-4569-b547-75edbd03aaf0&DisplayLang=en" Style="font-size: 14px;" Color="Color.Info" Underline="Underline.Hover">Don't have Excel? Download Free MS Excel Viewer</MudLink>
+			</MudItem>
+		</MudGrid>
+	</MudItem>
+</MudGrid>
+
+@code{
+	private string Month ="";
+	private string Year ="";
+}

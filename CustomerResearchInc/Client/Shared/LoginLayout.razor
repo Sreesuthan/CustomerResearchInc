@@ -1,0 +1,71 @@
+﻿@inherits LayoutComponentBase
+@inject AuthenticationStateProvider AuthStateProvider
+@inject ILocalStorageService LocalStorage
+@inject MudBlazor.ISnackbar snackBar
+@inject HttpClient Http
+@inject IJSRuntime Js
+@inject NavigationManager navigationManager
+
+<MudThemeProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<RadzenDialog/>
+<RadzenNotification/>
+<RadzenContextMenu/>
+<RadzenTooltip/>
+
+<MudLayout>
+    <MudContainer Style="max-width:1366px">
+        <MudGrid Justify="Justify.Center" Class="mt-0 mb-3" Style="background-color: #cde7f4;">
+            <MudItem lg="3" xs="11" sm="5" md="3">
+                <a href="/"><MudImage Src="Images/CRI-logo 1.png" Style="height:100%; width:100%;" /></a>
+            </MudItem>
+            <MudItem lg="6" xs="0" sm="3" md="6">
+            </MudItem>
+            <MudItem lg="2" xs="11" sm="3" md="2" Class="mt-1 text-center">
+                <AuthorizeView>
+                    <Authorized>
+                        <MudButton Variant="MudBlazor.Variant.Filled" OnClick="()=>Logout()" StartIcon="@Icons.Material.Outlined.Logout" Style="text-transform:none; float:right; background-color:#035583; color: #E3E3E6; border-radius: 25px; width:100%;">Logout</MudButton>
+                    </Authorized>
+                    <NotAuthorized>
+                        <MudButton Variant="MudBlazor.Variant.Filled" Href="login" StartIcon="@Icons.Material.Outlined.Login" Style="text-transform:none; float:right; background-color:#035583; color: #E3E3E6; border-radius: 25px; width:100%;">Client Login</MudButton>
+                    </NotAuthorized>
+                </AuthorizeView>
+            </MudItem>
+        </MudGrid>
+        @Body
+        <MudGrid Style="background-color:#035583;" Justify="Justify.Center">
+            <MudItem xs="10">
+                <MudGrid>
+                    <MudItem xs="12" Class="text-center">
+                        <MudText Style=" color: #E3E3E6; font-size: 14px;">Copyright © 1999-2023 Customer Research, Inc. All rights reserved.</MudText>
+                    </MudItem>
+                </MudGrid>
+            </MudItem>
+        </MudGrid>
+    </MudContainer>
+</MudLayout>
+
+@code {
+    bool open = false;
+
+    void ToggleDrawer()
+    {
+        open = !open;
+    }
+    async Task Logout()
+    {
+        if (!await Js.InvokeAsync<bool>("confirm", "Are you want to logout?"))
+        {
+            return;
+        }
+        else
+        {
+            await LocalStorage.RemoveItemAsync("token");
+            await AuthStateProvider.GetAuthenticationStateAsync();
+            var IsLoggedOut = true;
+            navigationManager.NavigateTo($"/{IsLoggedOut}", true);
+        }
+    }
+}
